@@ -25,15 +25,28 @@
       </svg>
     </div>
 
-    <div class="logincard" *ngIf="login">
-      <h1>LOGIN</h1>
+    <form [formGroup]="loginForm">
+      <div class="logincard" *ngIf="login">
+        <h1>LOGIN</h1>
+        <label>Username: </label><input type="text" formControlName="username">
+        <label>Password: </label><input type="password" formControlName="password">
+        <button (click)="onLogButtonClick()" [disabled]="!loginForm.valid">Login</button>
+        <p>Don't have an account yet?<span (click)="login = false; create = true;"> - Create Account - </span></p>
+      </div>
+    </form>
 
-    </div>
+    <form [formGroup]="createForm">
+      <div class="createcard" *ngIf="create">
+        <h1>CREATE ACCOUNT</h1>
+        <label>Username: </label><input type="text" formControlName="createUsername">
+        <label>Email: </label><input [email]="true" type="email" formControlName="createEmail">
+        <label>Password: </label><input type="password" formControlName="createPassword">
+        <label>Re-Enter Password: </label><input type="password" formControlName="createPassword2">
+        <button (click)="onLogButtonClick()" [disabled]="!createForm.valid">Create Account</button>
+        <p>Already have an account?<span (click)="create = false; login = true;"> - Log In - </span></p>
+      </div>
+    </form>
 
-    <div class="createcard" *ngIf="create">
-      <h1>Create Account</h1>
-
-    </div>
 
   </div>
 </div>

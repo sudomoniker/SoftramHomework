@@ -8,6 +8,8 @@ import {
   animate
 } from '@angular/animations';
 
+import { ConfirmedValidator } from '../confirmed.validator';
+
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
@@ -57,16 +59,24 @@ import {
 })
 export class NavComponent implements OnInit, OnDestroy{
 
-  reviewForm: FormGroup;
+  loginForm: FormGroup;
+  createForm: FormGroup;
   subscription$: Subscription = new Subscription();
 
   constructor(
     private fb: FormBuilder
     ) {
-      this.reviewForm = this.fb.group({
-        title: ['', Validators.required],
-        rating: ['', Validators.required],
-        comments: ['', Validators.required]
+      this.loginForm = this.fb.group({
+        username: ['', Validators.required],
+        password: ['', Validators.required]
+      });
+      this.createForm = this.fb.group({
+        createUsername: ['', Validators.required],
+        createEmail: ['', Validators.required],
+        createPassword: ['', Validators.required],
+        createPassword2: ['', Validators.required]
+      }, {
+        validator: ConfirmedValidator('createPassword', 'createPassword2')
       });
      }
 
@@ -85,7 +95,8 @@ export class NavComponent implements OnInit, OnDestroy{
      *
      */
     onLogButtonClick(): void {
-      console.log(this.reviewForm.value);
+      console.log(this.loginForm.value);
+      console.log(this.createForm.value);
     }
 
 
@@ -93,7 +104,10 @@ export class NavComponent implements OnInit, OnDestroy{
      * subscribe to review changes
      */
     subscribtTRFC(): void  {
-      this.subscription$.add(this.reviewForm.valueChanges.subscribe((formValues) => {
+      this.subscription$.add(this.loginForm.valueChanges.subscribe((formValues) => {
+        console.log(formValues);
+      }));
+      this.subscription$.add(this.createForm.valueChanges.subscribe((formValues) => {
         console.log(formValues);
       }));
     }

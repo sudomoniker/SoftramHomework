@@ -96,30 +96,6 @@
           </div>
 
           <div class="imgwrapper">
-            <div class="back" [@imageback] *ngIf="creators"></div>
-            <div class="back2" [@imageback2] *ngIf="creators"></div>
-            <div class="front" [@imagefront] *ngIf="creators">
-              <img src="../../assets/loonie.jpg">
-              <div class="text">
-                <h1></h1>
-                <p></p>
-              </div>
-            </div>
-          </div>
-
-          <div class="imgwrapper">
-            <div class="back" [@imageback] *ngIf="artists"></div>
-            <div class="back2" [@imageback2] *ngIf="artists"></div>
-            <div class="front" [@imagefront] *ngIf="artists">
-              <img src="../../assets/loonie.jpg">
-              <div class="text">
-                <h1></h1>
-                <p></p>
-              </div>
-            </div>
-          </div>
-
-          <div class="imgwrapper">
             <div class="back" [@imageback] *ngIf="about"></div>
             <div class="back2" [@imageback2] *ngIf="about"></div>
             <div class="front" [@imagefront] *ngIf="about">
@@ -141,60 +117,32 @@
             <li (mouseover)="home = true;
             browse = false;
             rules = false;
-            creators = false;
-            artists = false;
             about = false;">
-              <a>
+              <a routerLink="home">
                 HOME
               </a>
             </li>
             <li (mouseover)="browse = true;
             home = false;
             rules = false;
-            creators = false;
-            artists = false;
             about = false;">
-              <a>
+              <a routerLink="viewer">
                 BROWSE
               </a>
             </li>
             <li (mouseover)="rules = true;
             browse = false;
             home = false;
-            creators = false;
-            artists = false;
             about = false;">
-              <a>
+              <a routerLink="rules">
                 RULES
-              </a>
-            </li>
-            <li (mouseover)="creators = true;
-            browse = false;
-            rules = false;
-            home = false;
-            artists = false;
-            about = false;">
-              <a>
-                FOR CREATORS
-              </a>
-            </li>
-            <li (mouseover)="artists = true;
-            browse = false;
-            rules = false;
-            creators = false;
-            home = false;
-            about = false;">
-              <a>
-                FOR ARTISTS
               </a>
             </li>
             <li (mouseover)="about = true;
             browse = false;
             rules = false;
-            creators = false;
-            artists = false;
             home = false;">
-              <a>
+              <a routerLink="about">
                 ABOUT FAN.ART
               </a>
             </li>

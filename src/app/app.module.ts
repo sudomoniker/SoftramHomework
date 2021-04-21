@@ -10,13 +10,19 @@ import { NavComponent } from './nav/nav.component';
 import { ContainerComponent } from './container/container.component';
 import { InViewDirective } from './in-view.directive';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HomeComponent } from './home/home.component';
+import { RulesComponent } from './rules/rules.component';
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavComponent,
     ContainerComponent,
-    InViewDirective
+    InViewDirective,
+    HomeComponent,
+    RulesComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,

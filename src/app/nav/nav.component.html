@@ -1,6 +1,6 @@
 <div class="primary">
-  <div class="logo">
-    logo
+  <div class="logo" routerLink="home" (click)="closeClass()">
+    F
   </div>
 
   <div class="sidenav" (click)="toggleClass()">
@@ -11,12 +11,13 @@
     </svg>
   </div>
   <div class="login" (click)="account = true">
-    LOGIN
+    {{ user?.username }} <span *ngIf="!user">LOGIN</span>
   </div>
 </div>
 
 <div *ngIf="account" class="background">
   <div class="loginmenu">
+
     <div class="closelogin" (click)="account = false">
       <svg id="menu2" viewBox="0 0 100 100">
         <path class="line2 top topactive" d="M 20,30 H 80"/>
@@ -29,9 +30,12 @@
       <div class="logincard" *ngIf="login">
         <h1>LOGIN</h1>
         <label>Username: </label><input type="text" formControlName="username">
+          <p class="snackbox" *ngIf="!loginForm.get('username').valid && loginForm.get('username').touched">This is required!</p>
         <label>Password: </label><input type="password" formControlName="password">
+          <p class="snackbox" *ngIf="!loginForm.get('password').valid && loginForm.get('password').touched && !loginForm.get('password').errors?.Incorrect">This is required!</p>
+          <p class="snackbox" *ngIf="error">Incorrect Password</p>
         <button (click)="onLogButtonClick()" [disabled]="!loginForm.valid">Login</button>
-        <p>Don't have an account yet?<span (click)="login = false; create = true;"> - Create Account - </span></p>
+        <p>Don't have an account yet?<br class="ifmobile"><span (click)="login = false; create = true;"> - Create Account - </span></p>
       </div>
     </form>
 
@@ -39,11 +43,22 @@
       <div class="createcard" *ngIf="create">
         <h1>CREATE ACCOUNT</h1>
         <label>Username: </label><input type="text" formControlName="createUsername">
+          <p class="snackbox" *ngIf="!createForm.get('createUsername').valid && createForm.get('createUsername').touched">This is required!</p>
         <label>Email: </label><input [email]="true" type="email" formControlName="createEmail">
+          <p class="snackbox" *ngIf="!createForm.get('createEmail').valid && createForm.get('createEmail').touched">This is required!</p>
         <label>Password: </label><input type="password" formControlName="createPassword">
+          <p class="snackbox" *ngIf="!createForm.get('createPassword').valid && createForm.get('createPassword').touched">This is required!</p>
         <label>Re-Enter Password: </label><input type="password" formControlName="createPassword2">
-        <button (click)="onLogButtonClick()" [disabled]="!createForm.valid">Create Account</button>
-        <p>Already have an account?<span (click)="create = false; login = true;"> - Log In - </span></p>
+          <p class="snackbox" *ngIf="!createForm.get('createPassword2').valid && createForm.get('createPassword2').touched && !createForm.get('createPassword2').errors.confirmedValidator">This is required!</p>
+          <p class="snackbox" *ngIf="createForm.get('createPassword2').errors?.confirmedValidator && createForm.get('createPassword2').touched">Passwords aren't the same!</p>
+        <button (click)="onCreateButtonClick()" [disabled]="!createForm.valid">Create Account</button>
+        <p>Already have an account?<br class="ifmobile"><span (click)="create = false; login = true;"> - Log In - </span></p>
+      </div>
+
+
+      <div class="loggedin" *ngIf="loggedin">
+        <h1>Logged in as: {{ user.username }}</h1>
+        <button (click)="logout()">Logout</button>
       </div>
     </form>
 
@@ -60,10 +75,11 @@
         <div class="images">
 
           <div class="imgwrapper">
+            <div class="shadow" [@imageshadow] *ngIf="home"></div>
             <div class="back" [@imageback] *ngIf="home"></div>
             <div class="back2"[@imageback2] *ngIf="home"></div>
             <div class="front" [@imagefront] *ngIf="home">
-              <img src="../../assets/loonie.jpg">
+              <img src="../../assets/home.png">
               <div class="text">
                 <h1></h1>
                 <p></p>
@@ -72,10 +88,11 @@
           </div>
 
           <div class="imgwrapper">
+            <div class="shadow" [@imageshadow] *ngIf="browse"></div>
             <div class="back" [@imageback] *ngIf="browse"></div>
             <div class="back2" [@imageback2] *ngIf="browse"></div>
             <div class="front" [@imagefront] *ngIf="browse">
-              <img src="../../assets/loonie.jpg">
+              <img src="../../assets/browse.png">
               <div class="text">
                 <h1></h1>
                 <p></p>
@@ -84,10 +101,11 @@
           </div>
 
           <div class="imgwrapper">
+            <div class="shadow" [@imageshadow] *ngIf="rules"></div>
             <div class="back" [@imageback] *ngIf="rules"></div>
             <div class="back2" [@imageback2] *ngIf="rules"></div>
             <div class="front" [@imagefront] *ngIf="rules">
-              <img src="../../assets/loonie.jpg">
+              <img src="../../assets/rules.png">
               <div class="text">
                 <h1></h1>
                 <p></p>
@@ -96,10 +114,11 @@
           </div>
 
           <div class="imgwrapper">
+            <div class="shadow" [@imageshadow] *ngIf="about"></div>
             <div class="back" [@imageback] *ngIf="about"></div>
             <div class="back2" [@imageback2] *ngIf="about"></div>
             <div class="front" [@imagefront] *ngIf="about">
-              <img src="../../assets/loonie.jpg">
+              <img src="../../assets/about.png">
               <div class="text">
                 <h1></h1>
                 <p></p>
@@ -118,7 +137,7 @@
             browse = false;
             rules = false;
             about = false;">
-              <a routerLink="home">
+              <a routerLink="home" (click)="toggleClass(home)">
                 HOME
               </a>
             </li>
@@ -126,7 +145,7 @@
             home = false;
             rules = false;
             about = false;">
-              <a routerLink="viewer">
+              <a routerLink="viewer" (click)="toggleClass(browse)">
                 BROWSE
               </a>
             </li>
@@ -134,7 +153,7 @@
             browse = false;
             home = false;
             about = false;">
-              <a routerLink="rules">
+              <a routerLink="rules" (click)="toggleClass(rules)">
                 RULES
               </a>
             </li>
@@ -142,7 +161,7 @@
             browse = false;
             rules = false;
             home = false;">
-              <a routerLink="about">
+              <a routerLink="about" (click)="toggleClass(about)">
                 ABOUT FAN.ART
               </a>
             </li>

@@ -3,10 +3,25 @@
   font-family: "assets/ShadowsIntoLightTwo-Regular.ttf";
   src: url("assets/ShadowsIntoLightTwo-Regular.ttf");
 }
+@font-face {
+  font-family: "assets/CabinSketch-Bold.ttf";
+  src: url("assets/CabinSketch-Bold.ttf");
+}
+
+@keyframes glow {
+  0%,
+  100% {
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    filter: hue-rotate(360deg);
+  }
+}
 
 html,
 body {
   height: 100%;
+  overflow-x: hidden;
 }
 body {
   margin: 0;
@@ -23,8 +38,9 @@ a {
   text-decoration: none;
   white-space: nowrap;
 }
-a:active,
-a:hover {
+*:active,
+*:hover,
+*:focus {
   outline: 0;
 }
 
@@ -36,6 +52,39 @@ h1 {
   font-family: "assets/ShadowsIntoLightTwo-Regular.ttf";
   font-size: 32px;
   font-weight: 200;
+}
+
+button {
+  background-color: #fff;
+  color: #e34fa4;
+  padding: 10px;
+  outline: 0;
+  border: 1px solid #e34fa4;
+  transition: all 0.5s;
+  border-radius: 10px;
+  box-shadow: 0px 0px 0px 0px #000;
+}
+
+button:hover {
+  transform: translateX(10px);
+  box-shadow: -5px 0px 20px 0px #fff;
+  animation: glow 8s linear infinite;
+}
+
+.secondary {
+  height: calc(100% - 70px);
+  position: fixed;
+  top: 70px;
+  width: 100%;
+  left: 0;
+  overflow-y: scroll;
+}
+
+.line {
+  width: 90%;
+  margin: 50px auto 0px auto;
+  height: 1px;
+  border-bottom: 2px solid #e34fa4;
 }
 
 .container {

@@ -1,0 +1,66 @@
+.background {
+  width: 100%;
+  height: calc(100% - 70px);
+
+  overflow: hidden;
+  position: relative;
+}
+
+.spritesheet {
+  background: url("../../assets/fullart.png") repeat-x;
+  background-size: auto 100%;
+  animation: moveSpritesheet 60s linear infinite;
+  height: 100%;
+  width: auto;
+}
+
+@keyframes moveSpritesheet {
+  0% {
+    background-position: calc((100vh - 70px) * 4000 / 1000) 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+.overlay {
+  position: absolute;
+  text-align: center;
+  z-index: 2;
+  top: 70px;
+  width: auto;
+  height: auto;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #e34fa4;
+}
+
+.cta {
+  position: absolute;
+  text-align: center;
+  z-index: 2;
+  bottom: 0px;
+  width: auto;
+  height: auto;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+  transition: all 0.5s;
+}
+
+.cta:hover {
+  letter-spacing: 3px;
+  color: #e34fa4;
+}
+
+h1 {
+  white-space: nowrap;
+}
+br {
+  display: none;
+}
+@media (max-width: 500px) {
+  br {
+    display: block;
+  }
+}

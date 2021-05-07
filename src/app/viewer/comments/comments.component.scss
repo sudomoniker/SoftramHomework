@@ -1,0 +1,61 @@
+.commentcard {
+  min-width: 200px;
+  width: 100%;
+  border-left: 1px #a84fe3 solid;
+  padding: 0px 10px 10px 10px;
+  margin-top: 30px;
+  transition: all 0.5s;
+}
+
+h1 {
+  color: #e34fa4;
+  margin-top: 0px;
+}
+
+h3 {
+  color: #e34fa4;
+}
+
+a {
+  color: #a84fe3;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin-left: 15px;
+}
+
+a:hover {
+  letter-spacing: 3px;
+}
+
+svg {
+  position: absolute;
+  top: 5px;
+  right: 15px;
+  width: 36px;
+  height: 36px;
+  transition: all 0.5s;
+  fill: #e34fa4;
+}
+svg:hover {
+  transform: scale(1.2) rotate(180deg);
+}
+
+textarea {
+  padding: 10px;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.submitreply {
+  position: relative;
+  margin-left: 15px;
+}
+
+.replies {
+  margin-left: 15px;
+}
+
+.replywrapper {
+  width: 100%;
+  overflow-y: hidden;
+}

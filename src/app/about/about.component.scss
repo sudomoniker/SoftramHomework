@@ -1,0 +1,163 @@
+.space {
+  width: 100%;
+  height: 50px;
+}
+
+.secondary {
+  z-index: 2;
+}
+
+iframe {
+  min-width: 400px;
+}
+
+.left {
+  position: fixed;
+  z-index: 1;
+  top: 70px;
+  left: -50px;
+  height: calc(100% - 70px);
+  width: 200px;
+  background-image: url("../../assets/leftabout.png");
+  background-repeat: repeat-y;
+  background-position-x: left;
+  background-position-y: top;
+}
+.right {
+  position: fixed;
+  z-index: 1;
+  top: 70px;
+  right: 0;
+  height: calc(100% - 70px);
+  width: 200px;
+  background-image: url("../../assets/rightabout.png");
+  background-repeat: repeat-y;
+  background-position-x: left;
+  background-position-y: top;
+}
+@media (max-width: 1400px) {
+  .left {
+    left: -100px;
+  }
+  .right {
+    right: -100px;
+  }
+}
+@media (max-width: 992px) {
+  .fullbox {
+    width: 200px !important;
+  }
+  .box {
+    width: 200px !important;
+  }
+  .space {
+    display: none;
+  }
+  .col-md-4 {
+    text-align: center;
+  }
+  .fullbox {
+    margin: 0px auto 35px auto;
+  }
+  .block {
+    display: block !important;
+    height: auto;
+    margin: auto;
+  }
+  .block h1 {
+    display: block;
+    float: left;
+    width: 100%;
+    margin: auto;
+    white-space: nowrap;
+  }
+  .block2 {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .block2:after {
+    top: 60px !important;
+    right: auto;
+    left: calc(-20% - 10px);
+  }
+  h2 {
+    margin-top: 0;
+  }
+}
+@media (max-width: 850px) {
+  .left {
+    display: none;
+  }
+  .right {
+    display: none;
+  }
+}
+@media (max-width: 450px) {
+  iframe {
+    min-width: 0px !important;
+  }
+}
+
+a {
+  color: #e34fa4;
+  transition: all 0.5s;
+  white-space: nowrap;
+}
+a:hover {
+  letter-spacing: 2px;
+}
+
+.fullbox {
+  height: 200px;
+  width: 300px;
+  background-color: #e34fa4;
+}
+
+.box {
+  border: 2px solid #e34fa4;
+  background-color: #fff;
+  height: 100px;
+  width: 300px;
+  display: block;
+  transition: all 0.5s;
+  text-align: center;
+  cursor: pointer;
+}
+
+.box:hover {
+  transform: translateX(15px) translateY(-15px);
+}
+.box:hover h1 {
+  letter-spacing: 3px;
+}
+.box h1 {
+  white-space: nowrap;
+}
+h1 {
+  transition: all 0.5s;
+}
+
+.block {
+  display: flex;
+  justify-content: space-between;
+}
+
+.block2 {
+  width: 65%;
+  position: relative;
+}
+
+.block2:after {
+  content: "";
+  position: absolute;
+  width: 20%;
+  height: 2px;
+  background-color: #e34fa4;
+  top: 45px;
+  right: calc(100% + 2rem);
+}
+
+h2 {
+  color: #323232;
+  margin-top: 35px;
+}

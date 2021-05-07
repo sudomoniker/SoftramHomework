@@ -22,7 +22,10 @@
     "@angular/platform-browser": "~11.2.6",
     "@angular/platform-browser-dynamic": "~11.2.6",
     "@angular/router": "~11.2.6",
+    "@types/three": "^0.127.1",
     "rxjs": "~6.6.0",
+    "three": "^0.128.0",
+    "three-orbitcontrols-ts": "^0.1.2",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.3"
   },

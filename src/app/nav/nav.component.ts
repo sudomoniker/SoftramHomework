@@ -10,7 +10,6 @@ import {
 } from '@angular/animations';
 
 import { ConfirmedValidator } from '../shared/validators/confirmed.validator';
-import { WebRequestService } from '../shared/services/web-request.service';
 import { AuthService } from '../shared/services/auth.service';
 import { User } from '../shared/models/user.model';
 
@@ -74,21 +73,36 @@ import { User } from '../shared/models/user.model';
 })
 export class NavComponent implements OnInit, OnDestroy{
 
+  //currently logged in user
   user: User;
 
+  //login and create account forms
   loginForm: FormGroup;
   createForm: FormGroup;
   subscription$: Subscription = new Subscription();
-
   loginUsername: string;
   loginPassword: string;
   createUsername: string;
   createPassword: string;
   createEmail: string;
 
+  //booleans for opening and closing different nav elements
+  navOpen = false;
+  classApplied = false;
+  account = false;
+  loggedin = false;
+  login = true;
+  home = true;
+  create: boolean;
+  browse: boolean;
+  rules: boolean;
+  creators: boolean;
+  artists: boolean;
+  about: boolean;
+  error: any;
+
   constructor(
     private fb: FormBuilder,
-    private webRequest: WebRequestService,
     private authService: AuthService
     ) {
       this.loginForm = this.fb.group({
@@ -103,66 +117,66 @@ export class NavComponent implements OnInit, OnDestroy{
       }, {
         validator: ConfirmedValidator('createPassword', 'createPassword2')
       });
-     }
+  }
 
-     ngOnInit(): void {
-      this.subscribtTRFC();
-      this.login = true;
-      this.home = true;
-    }
+  ngOnInit(): void {
+    this.subscribtTRFC();
+  }
 
-    ngOnDestroy(): void {
-      this.subscription$.unsubscribe();
-    }
+  ngOnDestroy(): void {
+    this.subscription$.unsubscribe();
+  }
 
 
-    /**
-     * Handle logging button click.
-     *
-     */
-    onLogButtonClick(): void {
-      this.getUser(this.loginUsername, this.loginPassword);
-    }
 
-    onCreateButtonClick(): void {
-      this.createUser(this.createUsername, this.createPassword, this.createEmail);
-    }
 
-    logout() {
-      this.user = null;
-      this.loggedin = false;
-      this.login = true;
-    }
 
-    /**
-     * subscribe to review changes
-     */
-    subscribtTRFC(): void  {
-      this.subscription$.add(this.loginForm.valueChanges.subscribe((formValues) => {
-        this.loginUsername = formValues.username;
-        this.loginPassword = formValues.password;
-      }));
-      this.subscription$.add(this.createForm.valueChanges.subscribe((formValues) => {
-        this.createUsername = formValues.createUsername;
-        this.createPassword = formValues.createPassword;
-        this.createEmail = formValues.createEmail;
-      }));
-    }
 
-  navOpen = false;
-  classApplied = false;
-  account = false;
-  loggedin = false;
-  login: boolean;
-  create: boolean;
-  home: boolean;
-  browse: boolean;
-  rules: boolean;
-  creators: boolean;
-  artists: boolean;
-  about: boolean;
-  error: any;
+  //functions
 
+
+  /**
+  * Handle logging button click.
+  */
+  onLogButtonClick(): void {
+    this.getUser(this.loginUsername, this.loginPassword);
+  }
+
+  /**
+   * handle create account button click
+   */
+  onCreateButtonClick(): void {
+    this.createUser(this.createUsername, this.createPassword, this.createEmail);
+  }
+
+  /**
+   * logs the user out and sets the login/create box to the login state for loggin in
+   */
+  logout() {
+    this.user = null;
+    this.loggedin = false;
+    this.login = true;
+  }
+
+  /**
+   * subscribe to review changes
+   */
+  subscribtTRFC(): void  {
+    this.subscription$.add(this.loginForm.valueChanges.subscribe((formValues) => {
+      this.loginUsername = formValues.username;
+      this.loginPassword = formValues.password;
+    }));
+    this.subscription$.add(this.createForm.valueChanges.subscribe((formValues) => {
+      this.createUsername = formValues.createUsername;
+      this.createPassword = formValues.createPassword;
+      this.createEmail = formValues.createEmail;
+    }));
+  }
+
+  /**
+   * toggles the classes to open the nav menu
+   * @param boolean
+   */
   toggleClass(boolean?: boolean) {
     this.classApplied = !this.classApplied;
     this.navOpen = !this.navOpen;
@@ -171,20 +185,31 @@ export class NavComponent implements OnInit, OnDestroy{
     }
   }
 
+  /**
+   * closes the nav menu
+   */
   closeClass() {
     this.classApplied = false;
     this.navOpen = false;
   }
 
 
+
+
   //web request
-  //login
+
+  /**
+   * logs in a user
+   * @param username
+   * @param password
+   * @returns the user or error data
+   */
   getUser(username: string, password: string) {
     return this.authService.login(username, password).pipe(
       map((res: any) => {
         return res.user
       })
-    ).subscribe((res: any) => {
+    ).subscribe((res: User) => {
       this.user = res;
       this.create, this.login = false;
       this.loggedin = true;
@@ -195,7 +220,13 @@ export class NavComponent implements OnInit, OnDestroy{
     });
   }
 
-  //create a new user
+  /**
+   * creates a new user account
+   * @param username
+   * @param password
+   * @param email
+   * @returns user data or api error data
+   */
   createUser(username: string, password: string, email: string) {
     const payload = {
       username,
@@ -203,17 +234,12 @@ export class NavComponent implements OnInit, OnDestroy{
       email
     }
     return this.authService.signup(payload).pipe(
-      map((res: any) => {
+      map((res: User[]) => {
         return res[0]
       })
-    ).subscribe((res: any) => {
+    ).subscribe((res: User) => {
       this.user = res;
     });
   }
-
-
-
-
-
 
 }

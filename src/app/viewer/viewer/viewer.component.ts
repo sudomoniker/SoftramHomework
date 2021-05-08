@@ -9,7 +9,6 @@ import {
 import { WebRequestService } from 'src/app/shared/services/web-request.service';
 import { Artpost } from '../../shared/models/artpost.model';
 import { Creator } from '../../shared/models/creator.model';
-import { SortByPipe } from 'src/app/shared/pipes/sort-by.pipe';
 @Component({
   selector: 'app-viewer',
   templateUrl: './viewer.component.html',
@@ -80,12 +79,12 @@ import { SortByPipe } from 'src/app/shared/pipes/sort-by.pipe';
 })
 export class ViewerComponent implements OnInit {
 
-  gridview: boolean;
-  currentPost: number;
   artpost: Artpost;
   artposts: Artpost[] = [];
-  commentid: string;
   creators: Creator[] =[];
+  gridview: boolean;
+  currentPost: number;
+  commentid: string;
   imageloader: string;
 
   constructor(
@@ -98,12 +97,25 @@ export class ViewerComponent implements OnInit {
     this.getArtPosts('bla');
   }
 
+
+
+
+
+
+  //functions
+
+
+  /**
+   *  calls the api to retrieve a certain range of artposts
+   * @param range -this isnt currently being used, will be passed a range of posts to retrieve in the future
+   * @returns an array of artposts
+   */
   getArtPosts(range: string) {
-    return this.webRequest.get(`artpost`).pipe(
-      map((res: any) => {
+    return this.webRequest.get(`artposts`).pipe(
+      map((res: Artpost[]) => {
         return res
       })
-    ).subscribe((res: any) => {
+    ).subscribe((res: Artpost[]) => {
       this.artposts = res;
       this.currentPost = 0;
       this.getArtPost(this.currentPost);
@@ -111,21 +123,33 @@ export class ViewerComponent implements OnInit {
     });
   }
 
+
+  /**
+   * sets the current artpost to the id of the one passed to the function
+   * @param id
+   */
   getArtPost(id: number) {
     this.artpost = this.artposts[id];
-    this.commentid = this.artpost.idartpost + this.artpost.title;
+    this.commentid = this.artpost.idartposts + this.artpost.title;
   }
 
+  /**
+   * calls the api to retrieve the full list of creators in the database so that users can click on that creator and look at artwork submitted for that creator
+   * @returns list of creators
+   */
   getCreators() {
     return this.webRequest.get(`creators`).pipe(
-      map((res: any) => {
+      map((res: Creator[]) => {
         return res
       })
-    ).subscribe((res: any) => {
+    ).subscribe((res: Creator[]) => {
       this.creators = res;
     });
   }
 
+  /**
+   * when clicked, sets the artpost to the next artpost in the retrieved array
+   */
   getNextPost() {
     this.currentPost ++;
     if (this.currentPost == 9) {
@@ -134,6 +158,9 @@ export class ViewerComponent implements OnInit {
     this.getArtPost(this.currentPost);
   }
 
+  /**
+   * when clicked, sets the artpost to the previous artpost in the retrieved array
+   */
   getPrevPost() {
     this.currentPost --;
     if (this.currentPost == -1) {
@@ -142,17 +169,27 @@ export class ViewerComponent implements OnInit {
     this.getArtPost(this.currentPost);
   }
 
+  /**
+   * when in gridview, switches to single view of the artwork clicked on while in gridview
+   * @param artpost
+   */
   goToPost(artpost: Artpost) {
     this.artpost = artpost;
-    this.commentid = this.artpost.idartpost + this.artpost.title;
+    this.commentid = this.artpost.idartposts + this.artpost.title;
     this.gridview = false;
   }
 
+  /**
+   * creates a comment from the user input
+   * @param comment
+   */
   createComment(comment: string) {
 
   }
 
-
+  /**
+   * preloads the images in gridview, so the animation when switching between gridview and singleview is smooth
+   */
   preloadImage() {
     for(let x of this.artposts) {
       let img = new Image();

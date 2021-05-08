@@ -7,7 +7,7 @@ import {
   animate
 } from '@angular/animations';
 
-import { Comments } from 'src/app/shared/models/comments.model';
+import { Comment } from 'src/app/shared/models/comment.model';
 import { WebRequestService } from '../../shared/services/web-request.service';
 
 @Component({
@@ -32,7 +32,7 @@ export class CommentsComponent implements OnInit, OnChanges {
 
   @Input() input!: string;
 
-  comments: Comments;
+  comments: Comment;
   reply: string;
 
   constructor(private webRequest: WebRequestService) { }
@@ -47,23 +47,34 @@ export class CommentsComponent implements OnInit, OnChanges {
   }
 
 
+
+
+  //functions
+  /**
+   * opens the reply box for the id of the passed in comment
+   * @param id commentsid
+   */
   replyTo(id: string) {
     this.reply = id;
   }
+
+  /**
+   * closes the reply box in the comment section
+   */
   closeReplyTo() {
     this.reply = '';
   }
 
-
   /**
-   * get commetns
+   * gets all comments submitted with a replytoid of the id passed to the function
+   * @param id
    */
-   getCommentChain(id: string) {
+  getCommentChain(id: string) {
     this.webRequest.get(`commentchain/${id}`).pipe(
-      map((res: any) => {
+      map((res: Comment) => {
         return res
       })
-    ).subscribe((comments: Comments) => {
+    ).subscribe((comments: Comment) => {
       this.comments = comments
     });
   }

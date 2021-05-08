@@ -21,27 +21,42 @@ export class WebRequestService {
 
 
 
+  //functions
 
-
+ /**
+  * gets data from api
+  * @param uri pass in what api route you want to get
+  * @returns api response data
+  */
   get(uri: string) {
     return this.http.get(`${this.ROOT_URL}/${uri}`);
   }
 
+  /**
+   * post data to api
+   * @param uri pass in what api route you want to get
+   * @param payload an object of whatever you are trying to post
+   * @returns api response data
+   */
   post(uri: string, payload: Object) {
     return this.http.post(`${this.ROOT_URL}/${uri}`, payload);
   }
 
-  postImg(uri: string, title: string, image: File) {
-    const postData = new FormData();
-    postData.append("title", title);
-    postData.append("image", image);
-    return this.http.post(`${this.ROOT_URL}/${uri}`, postData);
-  }
-
+  /**
+   * edit already made entries in the database
+   * @param uri pass in what api route you want to get
+   * @param payload an object of whatever you are trying to post
+   * @returns api response data
+   */
   patch(uri: string, payload: Object) {
     return this.http.patch(`${this.ROOT_URL}/${uri}`, payload);
   }
 
+  /**
+   * delete an existing entry from the database
+   * @param uri pass in what api route you want to get
+   * @returns api response data
+   */
   delete(uri: string) {
     return this.http.delete(`${this.ROOT_URL}/${uri}`);
   }

@@ -16,10 +16,19 @@ export class AboutComponent implements OnInit {
   }
 
 
+
+  //functions
+
+  /**
+   * sets the video to video1
+   */
   video1() {
     this.videoSrc = "https://www.youtube.com/embed/hGR06bX5d_Q";
   }
 
+  /**
+   * sets the video to video2
+   */
   video2() {
     this.videoSrc = "https://www.youtube.com/embed/M_cnYbSUkCI";
   }

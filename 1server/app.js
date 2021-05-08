@@ -7,6 +7,7 @@ const fs = require('fs');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const checkAuth = require('./auth.middleware');
+const routes = require('./app.routes');
 
 
 
@@ -29,6 +30,7 @@ con.connect((err) => {
 });
 
 const app = express();
+const router = express.Router();
 app.use('/uploads', express.static('uploads'));
 
 app.use(express.json());
@@ -82,7 +84,7 @@ const storage = multer.diskStorage({
       const ext = MIME_TYPE_MAP[file.mimetype];
       cb(null, name + '-' + Date.now() + '.' + ext);
   }
-}); 
+});
 
 const upload = multer({storage: storage});
 
@@ -96,6 +98,9 @@ let transporter = nodemailer.createTransport({
 
 
 
+//router
+// router.post('/users', routes.userSignUp);
+// router.post('/login', routes.userLogin);
 
 
 
@@ -103,25 +108,24 @@ let transporter = nodemailer.createTransport({
 
 
 
-//here begins the code for routes
 
 
 
 /**
- * 
- * 
+ *
+ *
  * GET QUERIES
- * 
- * 
- * 
+ *
+ *
+ *
  */
 //this gets all users
 app.get('/users', (req, res) => {
   con.query('SELECT * FROM users', (err, rows) => {
     if(err) throw err;
-  
+
     res.send(rows);
-   
+
   });
 });
 
@@ -152,8 +156,8 @@ app.get('/users/:id/:password', (req, res) => {
 });
 
 //this gets all art posts
-app.get('/artpost', (req, res) => {
-  con.query('SELECT artpost.idartpost, artpost.imgsrc, artpost.user, artpost.title, artpost.creatorid, users.username, users.email, users.instagram, users.twitter FROM artpost LEFT JOIN users ON users.idusers = artpost.user', (err, rows) => {
+app.get('/artposts', (req, res) => {
+  con.query('SELECT artposts.idartposts, artposts.imgsrc, artposts.user, artposts.title, artposts.creatorid, users.username, users.email, users.instagram, users.twitter FROM artposts LEFT JOIN users ON users.idusers = artposts.user', (err, rows) => {
     if(err) throw err;
 
     res.send(rows);
@@ -162,7 +166,7 @@ app.get('/artpost', (req, res) => {
 
 //this gets a specific artpost
 app.get('/artpost/:id', (req, res) => {
-  con.query('SELECT * FROM artpost WHERE idartpost = ?', req.params.id, (err, rows) => {
+  con.query('SELECT * FROM artposts WHERE idartposts = ?', req.params.id, (err, rows) => {
     if(err) throw err;
 
     res.send(rows);
@@ -171,7 +175,7 @@ app.get('/artpost/:id', (req, res) => {
 
 //this gets a comment chain, the replytoid is either an artpost or another comment that is being replied to
 app.get('/commentchain/:replytoid', (req, res) => {
-  con.query('SELECT comment.idcomment, comment.replytoid, comment.user, comment.comment, users.username FROM comment LEFT JOIN users ON users.idusers = comment.user WHERE comment.replytoid = ?', req.params.replytoid, (err, rows) => {
+  con.query('SELECT comments.idcomments, comments.replytoid, comments.user, comments.comment, users.username FROM comments LEFT JOIN users ON users.idusers = comments.user WHERE comments.replytoid = ?', req.params.replytoid, (err, rows) => {
     if(err) throw err;
 
     res.send(rows);
@@ -189,17 +193,17 @@ app.get('/creators', (req, res) => {
 
 
 /**
- * 
- * 
+ *
+ *
  * POST QUERIES
- * 
- * 
- * 
+ *
+ *
+ *
  */
 //create user
  app.post('/users', async (req, res) => {
 
-  
+
 
   let encryptedPassword = await bcrypt.hash(req.body.password, saltRounds);
   console.log(encryptedPassword);
@@ -220,7 +224,7 @@ app.get('/creators', (req, res) => {
 });
 
 //create comment
-app.post('/comment', (req, res) => {
+app.post('/comments', (req, res) => {
 
   let comment = {
     "replytoid": req.body.replytoid,
@@ -228,7 +232,7 @@ app.post('/comment', (req, res) => {
     "comment": req.body.comment
   }
 
-  con.query("INSERT INTO comment SET ?", comment, (err, rows) => {
+  con.query("INSERT INTO comments SET ?", comment, (err, rows) => {
     if(err) throw err;
 
     res.send(rows);
@@ -236,7 +240,7 @@ app.post('/comment', (req, res) => {
 });
 
 //create artpost
-app.post('/artpost', (req, res) => {
+app.post('/artposts', (req, res) => {
 
   let artpost = {
     "imgsrc": req.body.imgsrc,
@@ -244,7 +248,7 @@ app.post('/artpost', (req, res) => {
     "title": req.body.title
   }
 
-  con.query("INSERT INTO artpost SET ?", artpost, (err, rows) => {
+  con.query("INSERT INTO artposts SET ?", artpost, (err, rows) => {
     if(err) throw err;
 
     res.send(rows);
@@ -253,12 +257,12 @@ app.post('/artpost', (req, res) => {
 
 
 /**
- * 
- * 
+ *
+ *
  * DELETE QUERIES
- * 
- * 
- * 
+ *
+ *
+ *
  */
 //delete user
  app.delete('/users', (req, res) => {
@@ -273,11 +277,11 @@ app.post('/artpost', (req, res) => {
 });
 
 //delete comment
-app.delete('/comment', (req, res) => {
+app.delete('/comments', (req, res) => {
 
   let deleteid = req.body.deleteid;
 
-  con.query("DELETE FROM comment WHERE idcomment=?", deleteid, (err, rows) => {
+  con.query("DELETE FROM comments WHERE idcomments=?", deleteid, (err, rows) => {
     if(err) throw err;
 
     res.send(rows);
@@ -285,11 +289,11 @@ app.delete('/comment', (req, res) => {
 });
 
 //delete artpost
-app.delete('/artpost', (req, res) => {
+app.delete('/artposts', (req, res) => {
 
   let deleteid = req.body.deleteid;
 
-  con.query("DELETE FROM artpost WHERE idartpost=?", deleteid, (err, rows) => {
+  con.query("DELETE FROM artposts WHERE idartposts=?", deleteid, (err, rows) => {
     if(err) throw err;
 
     res.send(rows);
@@ -297,10 +301,10 @@ app.delete('/artpost', (req, res) => {
 });
 
 /**
- * 
- * 
+ *
+ *
  * PATCH QUERIES
- * 
- * 
- * 
+ *
+ *
+ *
  */

@@ -11,6 +11,8 @@
 <div class="topbox">
   <span class="topspan">Creator: </span>
   <select name="" id="creatorselect">
+    <option value="all">All</option>
+    <option value="disabled" disabled></option>
     <option value="{{creator.idcreators}}" *ngFor="let creator of creators | sortBy:'creator'">{{creator.creator}}</option>
   </select>
 
@@ -33,8 +35,8 @@
       <div class="information">
         <h1>{{artpost?.title}}</h1>
         <p>Artist: {{artpost?.username}}</p>
-        <p *ngIf="artpost?.instagram">Instagram: {{ artpost.instagram }}</p>
-        <p *ngIf="artpost?.twitter">Twitter: {{ artpost.twitter }}</p>
+        <p *ngIf="artpost?.instagram">Instagram: <a href="https://{{ artpost.instagram }}" target="_blank">{{ artpost.instagram }}</a></p>
+        <p *ngIf="artpost?.twitter">Twitter: <a href="https://{{ artpost.twitter }}" target="_blank">{{ artpost.twitter }}</a></p>
         <p>Email: {{ artpost?.email }}</p>
       </div>
     </div>

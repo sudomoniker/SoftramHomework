@@ -2,9 +2,9 @@
   <div class="commentcard">
     <h3>{{comment.username}}</h3>
     <p>{{comment.comment}}</p>
-    <a (click)="replyTo(comment.idcomment)">Reply</a>
+    <a (click)="replyTo(comment.idcomments)" [class.active]="this.reply == comment.idcomments">Reply</a>
     <div class="replywrapper">
-      <div class="submitreply"  *ngIf="this.reply == comment.idcomment" [@height]>
+      <div class="submitreply"  *ngIf="this.reply == comment.idcomments" [@height]>
         <textarea name="" id="" cols="30" rows="5" placeholder="Enter reply here..."></textarea>
         <button>Submit Reply</button>
         <svg (click)="closeReplyTo()" id="close" viewBox="0 0 24 24"><path d="M5.293 5.293a1 1 0 011.414 0L12 10.586l5.293-5.293a1 1 0 111.414 1.414L13.414 12l5.293 5.293a1 1 0 01-1.414 1.414L12 13.414l-5.293 5.293a1 1 0 01-1.414-1.414L10.586 12 5.293 6.707a1 1 0 010-1.414z"/></svg>
@@ -14,7 +14,7 @@
 
 
     <div class="replies">
-      <app-comments [input]="comment.idcomment"></app-comments>
+      <app-comments [input]="comment.idcomments"></app-comments>
     </div>
 
   </div>

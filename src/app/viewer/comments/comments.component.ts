@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
 import { map } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 import {
   trigger,
   style,
@@ -9,6 +10,7 @@ import {
 
 import { Comment } from 'src/app/shared/models/comment.model';
 import { WebRequestService } from '../../shared/services/web-request.service';
+import { CommentServiceService } from 'src/app/shared/services/comment-service.service';
 
 @Component({
   selector: 'app-comments',
@@ -28,25 +30,48 @@ import { WebRequestService } from '../../shared/services/web-request.service';
 
   ]
 })
-export class CommentsComponent implements OnInit, OnChanges {
+export class CommentsComponent implements OnInit, OnChanges, OnDestroy {
 
-  @Input() input!: string;
-
+  @Input() input!: number;
+  reply: number;
   comments: Comment;
-  reply: string;
+  subscription = new Subscription();
 
-  constructor(private webRequest: WebRequestService) { }
+  constructor(
+    private webRequest: WebRequestService,
+    private commentService: CommentServiceService) { }
 
   ngOnInit(): void {
-    this.reply = '';
-    this.getCommentChain(this.input);
+    this.reply = null;
+
+    if(!this.input) {
+      this.subscription.add(
+        this.commentService.returnComments().subscribe((comments => {
+          this.comments = comments;
+        }))
+      );
+    }
+
+    if(this.input) {
+      //help
+      console.log(this.input);
+      this.subscription.add(
+        this.commentService.returnComments().subscribe((comments => {
+          this.comments = comments;
+          console.log(comments)
+        }))
+      );
+    }
+
+
   }
 
   ngOnChanges() {
-    this.getCommentChain(this.input);
   }
 
-
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 
 
   //functions
@@ -54,7 +79,7 @@ export class CommentsComponent implements OnInit, OnChanges {
    * opens the reply box for the id of the passed in comment
    * @param id commentsid
    */
-  replyTo(id: string) {
+  replyTo(id: number) {
     this.reply = id;
   }
 
@@ -62,21 +87,7 @@ export class CommentsComponent implements OnInit, OnChanges {
    * closes the reply box in the comment section
    */
   closeReplyTo() {
-    this.reply = '';
-  }
-
-  /**
-   * gets all comments submitted with a replytoid of the id passed to the function
-   * @param id
-   */
-  getCommentChain(id: string) {
-    this.webRequest.get(`commentchain/${id}`).pipe(
-      map((res: Comment) => {
-        return res
-      })
-    ).subscribe((comments: Comment) => {
-      this.comments = comments
-    });
+    this.reply = null;
   }
 
 }

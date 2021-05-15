@@ -4,11 +4,14 @@ import {
   trigger,
   style,
   transition,
-  animate
+  animate,
+  keyframes
 } from '@angular/animations';
 import { WebRequestService } from 'src/app/shared/services/web-request.service';
 import { Artpost } from '../../shared/models/artpost.model';
 import { Creator } from '../../shared/models/creator.model';
+import { Comment } from '../../shared/models/comment.model';
+import { CommentServiceService } from 'src/app/shared/services/comment-service.service';
 @Component({
   selector: 'app-viewer',
   templateUrl: './viewer.component.html',
@@ -18,20 +21,33 @@ import { Creator } from '../../shared/models/creator.model';
     trigger('singleview', [
       transition(':enter', [
         style({transform: 'translateX(-100vw)'}),
-        animate('1200ms ease-in', style({transform: 'translateX(0vw)'}))
+        animate('1500ms ease-in', keyframes([
+          style({transform: 'translateX(-105vw)', offset: .15}),
+          style({transform: 'translateX(0vw)', offset: 1}),
+        ]))
       ]),
       transition(':leave', [
-        animate('1200ms ease-in', style({transform: 'translateX(100vw)'}))
+        animate('1500ms ease-in', keyframes([
+          style({transform: 'translateX(-5vw)', offset: .15}),
+          style({transform: 'translateX(100vw)', offset: 1}),
+        ]))
       ])
     ]),
+
     trigger('gridview', [
       transition(':enter', [
         style({transform: 'translateX(-100vw)'}),
-        animate('1200ms ease-in', style({transform: 'translateX(0vw)'}))
+        animate('1500ms ease-in', keyframes([
+          style({transform: 'translateX(-105vw)', offset: .15}),
+          style({transform: 'translateX(0vw)', offset: 1}),
+        ]))
       ]),
       transition(':leave', [
-        animate('1200ms ease-in', style({transform: 'translateX(100vw)'}))
-      ])
+        animate('1500ms ease-in', keyframes([
+          style({transform: 'translateX(-5vw)', offset: .15}),
+          style({transform: 'translateX(100vw)', offset: 1}),
+        ]))
+      ]),
     ]),
 
     trigger('line', [
@@ -74,7 +90,6 @@ import { Creator } from '../../shared/models/creator.model';
       ])
     ]),
 
-
   ]
 })
 export class ViewerComponent implements OnInit {
@@ -84,11 +99,11 @@ export class ViewerComponent implements OnInit {
   creators: Creator[] =[];
   gridview: boolean;
   currentPost: number;
-  commentid: string;
   imageloader: string;
 
   constructor(
-    private webRequest: WebRequestService
+    private webRequest: WebRequestService,
+    private commentService: CommentServiceService
   ) { }
 
   ngOnInit(): void {
@@ -119,7 +134,6 @@ export class ViewerComponent implements OnInit {
       this.artposts = res;
       this.currentPost = 0;
       this.getArtPost(this.currentPost);
-      this.preloadImage();
     });
   }
 
@@ -130,7 +144,7 @@ export class ViewerComponent implements OnInit {
    */
   getArtPost(id: number) {
     this.artpost = this.artposts[id];
-    this.commentid = this.artpost.idartposts + this.artpost.title;
+    this.commentService.getCommentChain(this.artpost.idartposts);
   }
 
   /**
@@ -175,26 +189,9 @@ export class ViewerComponent implements OnInit {
    */
   goToPost(artpost: Artpost) {
     this.artpost = artpost;
-    this.commentid = this.artpost.idartposts + this.artpost.title;
+    this.commentService.getCommentChain(this.artpost.idartposts);
     this.gridview = false;
   }
 
-  /**
-   * creates a comment from the user input
-   * @param comment
-   */
-  createComment(comment: string) {
-
-  }
-
-  /**
-   * preloads the images in gridview, so the animation when switching between gridview and singleview is smooth
-   */
-  preloadImage() {
-    for(let x of this.artposts) {
-      let img = new Image();
-      img.src = x.imgsrc ;
-    }
-  }
 
 }

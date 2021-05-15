@@ -47,11 +47,10 @@
           <textarea placeholder="Enter comment here..." #replytext></textarea>
           <div class="submitReply" (click)="createComment(replytext.value)">Submit Comment</div>
       </div>
-      <div class="scrollable">
-          <app-comments *ngIf="artpost" [(input)]="commentid"></app-comments>
-      </div>
+      <app-comments></app-comments>
     </div>
   </div>
+
 
 
   <div *ngIf="gridview" [@gridview] class="view">

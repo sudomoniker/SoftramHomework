@@ -4,12 +4,14 @@ export class Comment {
     public replytoid: string,
     public user: number,
     public comment: string,
+    public replycommentid?: number,
     public username?: string
   ) {
     this.idcomments = idcomments;
     this.replytoid = replytoid;
     this.user = user;
     this.comment = comment;
+    this.replycommentid = replycommentid;
     this.username = username;
   }
 }

@@ -207,6 +207,7 @@ export class NavComponent implements OnInit, OnDestroy{
   getUser(username: string, password: string) {
     return this.authService.login(username, password).pipe(
       map((res: any) => {
+        console.log(res);
         return res.user
       })
     ).subscribe((res: User) => {

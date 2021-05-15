@@ -175,7 +175,16 @@ app.get('/artpost/:id', (req, res) => {
 
 //this gets a comment chain, the replytoid is either an artpost or another comment that is being replied to
 app.get('/commentchain/:replytoid', (req, res) => {
-  con.query('SELECT comments.idcomments, comments.replytoid, comments.user, comments.comment, users.username FROM comments LEFT JOIN users ON users.idusers = comments.user WHERE comments.replytoid = ?', req.params.replytoid, (err, rows) => {
+  con.query('SELECT comments.idcomments, comments.replytoid, comments.user, comments.comment, comments.replycommentid, users.username FROM comments LEFT JOIN users ON users.idusers = comments.user WHERE comments.replytoid = ?', req.params.replytoid, (err, rows) => {
+    if(err) throw err;
+
+    res.send(rows);
+  });
+});
+
+//this gets a reply chain
+app.get('/replychain/:replytoid', (req, res) => {
+  con.query('SELECT comments.idcomments, comments.replytoid, comments.user, comments.comment, comments.replycommentid, users.username FROM comments LEFT JOIN users ON users.idusers = comments.user WHERE comments.replycommentid = ?', req.params.replytoid, (err, rows) => {
     if(err) throw err;
 
     res.send(rows);

@@ -114,6 +114,15 @@
             </div>
           </div>
 
+          <div class="imgwrapper">
+            <div class="shadow" [@imageshadow] *ngIf="post"></div>
+            <div class="back" [@imageback] *ngIf="post"></div>
+            <div class="back2" [@imageback2] *ngIf="post"></div>
+            <div class="front" [@imagefront] *ngIf="post">
+              <img src="../../assets/post.png">
+            </div>
+          </div>
+
 
         </div>
       </div>
@@ -124,7 +133,8 @@
             <li (mouseover)="home = true;
             browse = false;
             rules = false;
-            about = false;">
+            about = false;
+            post = false;">
               <a routerLink="home" (click)="toggleClass(home)">
                 HOME
               </a>
@@ -132,7 +142,8 @@
             <li (mouseover)="browse = true;
             home = false;
             rules = false;
-            about = false;">
+            about = false;
+            post = false;">
               <a routerLink="viewer" (click)="toggleClass(browse)">
                 BROWSE
               </a>
@@ -140,7 +151,8 @@
             <li (mouseover)="rules = true;
             browse = false;
             home = false;
-            about = false;">
+            about = false;
+            post = false;">
               <a routerLink="rules" (click)="toggleClass(rules)">
                 RULES
               </a>
@@ -148,9 +160,19 @@
             <li (mouseover)="about = true;
             browse = false;
             rules = false;
-            home = false;">
+            home = false;
+            post = false;">
               <a routerLink="about" (click)="toggleClass(about)">
                 ABOUT FAN.ART
+              </a>
+            </li>
+            <li (mouseover)="about = false;
+            browse = false;
+            rules = false;
+            home = false;
+            post = true;">
+              <a routerLink="create" (click)="toggleClass(post)">
+                CREATE A POST
               </a>
             </li>
           </ul>

@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { WebRequestService } from './web-request.service';
+import { tap } from 'rxjs/operators';
+import { BehaviorSubject } from "rxjs"
 
 import { User } from '../models/user.model'
 
@@ -10,11 +12,13 @@ import { User } from '../models/user.model'
 
 export class AuthService {
 
-  user?: User;
+  user?: BehaviorSubject<User>;
 
   constructor(
     private webService: WebRequestService
-    ) {    }
+    ) {
+      this.user = new BehaviorSubject<User>(null);
+      }
 
 
 
@@ -27,7 +31,12 @@ export class AuthService {
      * fairly certain this is a bad way to log a user in, putting the password in the get request, will implement a proper post request later
      */
     login(username: string, password: string) {
-      return this.webService.get(`users/${username}/${password}`)
+      return this.webService.get(`users/${username}/${password}`).pipe(
+        tap(((user: User) => {
+          console.log(user);
+          this.user.next(user);
+        }))
+      )
     }
 
     /**
@@ -39,6 +48,13 @@ export class AuthService {
       return this.webService.post('users', payload);
     }
 
+    /**
+     *
+     * @returns the loggedin user
+     */
+    returnUser() {
+      return this.user.asObservable();
+    }
 
 }
 

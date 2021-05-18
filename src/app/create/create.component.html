@@ -1,0 +1,19 @@
+<div class="secondary">
+  <div class="container-fluid">
+
+    <div class="row">
+      <h1>CREATE A NEW POST</h1>
+    </div>
+
+    <div class="row">
+      <form>
+        <div class="postcard">
+          <label>Title: </label><input type="text" #title>
+          <label>Image: </label><input type="file" #imgsrc (change)="onChange($event)">
+        <button (click)="upload(title.value)">Upload</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>

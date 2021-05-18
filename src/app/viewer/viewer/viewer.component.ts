@@ -12,6 +12,8 @@ import { Artpost } from '../../shared/models/artpost.model';
 import { Creator } from '../../shared/models/creator.model';
 import { Comment } from '../../shared/models/comment.model';
 import { CommentServiceService } from 'src/app/shared/services/comment-service.service';
+import { AuthService } from 'src/app/shared/services/auth.service';
+import { User } from 'src/app/shared/models/user.model';
 @Component({
   selector: 'app-viewer',
   templateUrl: './viewer.component.html',
@@ -94,6 +96,8 @@ import { CommentServiceService } from 'src/app/shared/services/comment-service.s
 })
 export class ViewerComponent implements OnInit {
 
+  user: User
+
   artpost: Artpost;
   artposts: Artpost[] = [];
   creators: Creator[] =[];
@@ -103,6 +107,7 @@ export class ViewerComponent implements OnInit {
 
   constructor(
     private webRequest: WebRequestService,
+    private auth: AuthService,
     private commentService: CommentServiceService
   ) { }
 
@@ -191,6 +196,25 @@ export class ViewerComponent implements OnInit {
     this.artpost = artpost;
     this.commentService.getCommentChain(this.artpost.idartposts);
     this.gridview = false;
+  }
+
+  async createComment(comment: string) {
+    await this.auth.returnUser().subscribe((user => {
+      this.user = user
+    }));
+
+    if(this.user == null) {
+      return
+    }
+
+    let user = this.user.idusers;
+    let replytoid = this.artpost.idartposts;
+    let payload = {
+      replytoid,
+      user,
+      comment
+    }
+    this.webRequest.post('comments', payload).subscribe();
   }
 
 

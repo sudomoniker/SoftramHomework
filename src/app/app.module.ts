@@ -13,6 +13,7 @@ import { RulesComponent } from './rules/rules.component';
 import { AboutComponent } from './about/about.component';
 
 import { SharedModule } from './shared/shared.module';
+import { CreateComponent } from './create/create.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { SharedModule } from './shared/shared.module';
     HomeComponent,
     RulesComponent,
     AboutComponent,
+    CreateComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,20 +1,26 @@
 import { Injectable } from '@angular/core';
 import { WebRequestService } from './web-request.service';
-import { Subject } from "rxjs"
+import { BehaviorSubject } from "rxjs"
 import { map } from 'rxjs/operators';
 import { Comment } from '../models/comment.model';
+import { AuthService } from './auth.service';
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommentServiceService {
 
-  comments: Subject<Comment>;
-  replies: Subject<Comment>;
+  comments: BehaviorSubject<any>;
+  replies: BehaviorSubject<any>;
+  user: User;
 
-  constructor(private webRequest: WebRequestService) {
-    this.comments = new Subject();
-    this.replies = new Subject();
+  constructor(
+    private webRequest: WebRequestService,
+    private auth: AuthService
+    ) {
+    this.comments = new BehaviorSubject([]);
+    this.replies = new BehaviorSubject([]);
    }
 
   /**
@@ -54,7 +60,24 @@ export class CommentServiceService {
    * creates a comment from the user input
    * @param comment
    */
-  createComment(comment: string) {
+  async createComment(replytoid: number, comment: string, replycommentid?: number) {
+    await this.auth.returnUser().subscribe((user => {
+      this.user = user
+    }));
 
+    if(this.user == null) {
+      return
+    }
+
+    let user = this.user.idusers;
+    let payload = {
+      replytoid,
+      user,
+      comment,
+      replycommentid
+    }
+    this.webRequest.post(`comments`, payload).subscribe();
   }
+
+
 }

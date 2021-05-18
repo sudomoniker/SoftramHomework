@@ -93,6 +93,7 @@ export class NavComponent implements OnInit, OnDestroy{
   loggedin = false;
   login = true;
   home = true;
+  post: boolean;
   create: boolean;
   browse: boolean;
   rules: boolean;
@@ -208,7 +209,7 @@ export class NavComponent implements OnInit, OnDestroy{
     return this.authService.login(username, password).pipe(
       map((res: any) => {
         console.log(res);
-        return res.user
+        return res
       })
     ).subscribe((res: User) => {
       this.user = res;

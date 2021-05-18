@@ -144,11 +144,12 @@ app.get('/users/:id/:password', (req, res) => {
         jwt_key,
         { expiresIn: '4h' }
       );
-      res.status(200).json({
-        token: token,
-        expiresIn: 14400,
-        user
-      });
+      // res.status(200).json({
+      //   token: token,
+      //   expiresIn: 14400,
+      //   user
+      // });
+      res.send(user);
     }else{
       res.send("Passwords do not match!")
     }
@@ -238,7 +239,8 @@ app.post('/comments', (req, res) => {
   let comment = {
     "replytoid": req.body.replytoid,
     "user": req.body.user,
-    "comment": req.body.comment
+    "comment": req.body.comment,
+    "replycommentid": req.body.replycommentid
   }
 
   con.query("INSERT INTO comments SET ?", comment, (err, rows) => {

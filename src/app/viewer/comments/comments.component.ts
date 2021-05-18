@@ -9,7 +9,6 @@ import {
 } from '@angular/animations';
 
 import { Comment } from 'src/app/shared/models/comment.model';
-import { WebRequestService } from '../../shared/services/web-request.service';
 import { CommentServiceService } from 'src/app/shared/services/comment-service.service';
 
 @Component({
@@ -32,14 +31,15 @@ import { CommentServiceService } from 'src/app/shared/services/comment-service.s
 })
 export class CommentsComponent implements OnInit, OnChanges, OnDestroy {
 
+  @Input() artpostid!: number;
   @Input() input!: number;
   reply: number;
   comments: Comment;
   subscription = new Subscription();
 
   constructor(
-    private webRequest: WebRequestService,
-    private commentService: CommentServiceService) { }
+    private commentService: CommentServiceService
+    ) { }
 
   ngOnInit(): void {
     this.reply = null;
@@ -53,12 +53,9 @@ export class CommentsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     if(this.input) {
-      //help
-      console.log(this.input);
       this.subscription.add(
-        this.commentService.returnComments().subscribe((comments => {
-          this.comments = comments;
-          console.log(comments)
+        this.commentService.returnReplies().subscribe((comments => {
+          this.comments = comments.filter((c => c.replycommentid == this.input));
         }))
       );
     }
@@ -88,6 +85,10 @@ export class CommentsComponent implements OnInit, OnChanges, OnDestroy {
    */
   closeReplyTo() {
     this.reply = null;
+  }
+
+  createComment(comment: string, replycommentid?: number) {
+    this.commentService.createComment(this.artpostid, comment, replycommentid)
   }
 
 }

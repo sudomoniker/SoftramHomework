@@ -11,8 +11,8 @@ import { User } from '../models/user.model';
 })
 export class CommentServiceService {
 
-  comments: BehaviorSubject<any>;
-  replies: BehaviorSubject<any>;
+  comments: BehaviorSubject<Comment[]>;
+  replies: BehaviorSubject<Comment[]>;
   user: User;
 
   constructor(

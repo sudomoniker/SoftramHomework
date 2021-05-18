@@ -34,7 +34,7 @@ export class CommentsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() artpostid!: number;
   @Input() input!: number;
   reply: number;
-  comments: Comment;
+  comments: Comment[];
   subscription = new Subscription();
 
   constructor(
